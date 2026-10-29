@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expo | Mis Juegos</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #090d1f;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 35px 20px;
+            background: linear-gradient(135deg, #0d1b3e, #1a2c56);
+            border-bottom: 2px solid #2b5cff;
+        }
+
+        header h1 {
+            font-size: 42px;
+            color: #79a8ff;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #ccddcc;
+        }
+
+        .contenedor {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .contenedor h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .juegos {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .juego {
+            background: #111a33;
+            border: 1px solid #1f3566;
+            border-radius: 18px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease,
+                        box-shadow 0.3s ease,
+                        border-color 0.3s ease;
+        }
+
+        .juego:hover {
+            transform: translateY(-5px);
+            border-color: #5c85ff;
+            box-shadow: 0 0 25px rgba(44, 92, 255, 0.4);
+        }
+
+        .imagen-juego {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 1px solid #2b5cff;
+            background: #111a33;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .imagen-juego img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .imagen-juego.alta {
+            height: 320px;
+            background: #090d1f;
+            padding: 10px;
+        }
+
+        .imagen-juego.alta img {
+            object-fit: contain;
+        }
+
+        .juego {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .juego p {
+            flex-grow: 1;
+            padding-bottom: 20px;
+        }
+
+        .juego .boton {
+            margin-top: auto;
+            align-self: center;
+        }
+
+        .juego h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #9cbaff;
+        }
+
+        .juego p {
+            color: #c5d2e6;
+            line-height: 1.5;
+        }
+
+        .boton {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 22px;
+            background: #2b5cff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .boton:hover {
+            background: #4d75ff;
+            transform: scale(1.03);
+        }
+
+        .btn-scratch {
+            background: #ff5722;
+        }
+
+        .btn-scratch:hover {
+            background: #e64a19;
+        }
+
+        #informacion {
+            display: none;
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #111a33;
+            border: 1px solid #2b5cff;
+            border-radius: 18px;
+            animation: aparecer 0.5s ease;
+            text-align: center;
+        }
+
+        #informacion h2 {
+            font-size: 32px;
+            color: #9cbaff;
+            margin: 20px 0;
+        }
+
+        #informacion p {
+            line-height: 1.8;
+            color: #dde3ed;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        #informacion h3 {
+            margin: 25px 0 10px;
+            color: #79a8ff;
+            text-align: left;
+        }
+
+        .imagen-detalle-container {
+            width: 100%;
+            min-height: 100px;
+            max-height: 280px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #2b5cff;
+            margin-bottom: 20px;
+            background: #090d1f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .imagen-detalle-container img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 280px;
+            object-fit: contain;
+        }
+
+        .imagen-detalle-container.alta {
+            max-height: 460px;
+            padding: 10px;
+        }
+
+        .imagen-detalle-container.alta img {
+            width: auto;
+            max-width: 100%;
+            max-height: 440px;
+        }
+
+        .captura-container {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .captura-container h3 {
+            text-align: center !important;
+        }
+
+        .captura-container img {
+            display: block;
+            width: auto;
+            max-width: 100%;
+            max-height: 420px;
+            margin: 15px auto 0;
+            border-radius: 12px;
+            border: 2px solid #2b5cff;
+        }
+
+        .qr-container {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .qr-container h3 {
+            text-align: center !important;
+        }
+
+        .qr-container img {
+            display: block;
+            width: 220px;
+            max-width: 100%;
+            height: auto;
+            margin: 15px auto 0;
+            border-radius: 12px;
+            border: 2px solid #2b5cff;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            color: #8899b3;
+            border-top: 1px solid #16254a;
+        }
+
+        @media (max-width: 600px) {
+            .juegos {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 32px;
+            }
+
+            .contenedor {
+                margin: 20px auto;
+                padding: 15px;
+            }
+
+            .juego {
+                padding: 18px;
+            }
+
+            #informacion {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            #informacion h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎮 Juegos Expo</h1>
+    <p>¡Descubrí nuestros juegos!</p>
+</header>
+
+<main>
+    <section class="contenedor" id="inicio">
+        <h2>Explorá nuestros juegos</h2>
+
+        <div class="juegos">
+
+            <article class="juego" data-juego="perro" tabindex="0">
+                <div class="imagen-juego">
+                    <img src="perrrro.png" alt="Hamburguesería Calzoski">
+                </div>
+                <h3>Hamburguesería Calzoski</h3>
+                <p>Atendé el lujoso restaurante con el perro chef y serví los mejores platillos.</p>
+                <button class="boton" type="button">Ver información</button>
+            </article>
+
+            <article class="juego" data-juego="camara" tabindex="0">
+                <div class="imagen-juego alta">
+                    <img src="camara.png" alt="Cámara">
+                </div>
+                <h3>Cámara</h3>
+                <p>Sacá fotos desde tu celular con esta aplicación y capturá los mejores momentos.</p>
+                <button class="boton" type="button">Ver información</button>
+            </article>
+
+            <article class="juego" data-juego="carcel" tabindex="0">
+                <div class="imagen-juego">
+                    <img src="Carcel.jpeg" alt="Escape de la Cárcel">
+                </div>
+                <h3>Escape de la Cárcel</h3>
+                <p>Tomá decisiones estratégicas, leé las instrucciones y lográ escapar.</p>
+                <button class="boton" type="button">Ver información</button>
+            </article>
+
+            <article class="juego" data-juego="viborita" tabindex="0">
+                <div class="imagen-juego">
+                    <img src="vivo.jpeg" alt="La Viborita">
+                </div>
+                <h3>La Viborita</h3>
+                <p>El clásico juego retro para comer y evitar chocar contra las paredes.</p>
+                <button class="boton" type="button">Ver información</button>
+            </article>
+
+        </div>
+    </section>
+
+    <section id="informacion">
+        <button class="boton" id="volver" type="button" style="float:left; margin-top:0;">
+            ← Volver a los juegos
+        </button>
+
+        <div style="clear:both;"></div>
+        <div id="contenido"></div>
+    </section>
+</main>
+
+<footer>
+    <p>©️ 2026 GameZone | Página creada en HTML5, CSS3 y JavaScript</p>
+</footer>
+
+<script>
+    const juegos = {
+        perro: {
+            nombre: "Hamburguesería Calzoski",
+            imagen: "perrrro.png",
+            descripcion: "Un divertido juego interactivo desarrollado en Scratch donde un simpático perro atiende su propio restaurante elegante. Los clientes llegan a pedir platillos y tu objetivo es elegir y servir la comida correcta del menú con velocidad y precisión para mantener contentos a los comensales.",
+            genero: "Simulación y Gestión",
+            creador: "Proyecto Scratch",
+            modos: "Niveles por pedidos",
+            destacado: "Gráficos detallados, temática única de cocina canina y acción rápida.",
+            link: "https://scratch.mit.edu/projects/1396999570/"
+        },
+
+        camara: {
+            nombre: "Cámara",
+            imagen: "camara.png",
+            descripcion: "Una aplicación móvil de cámara para sacar fotos de forma simple y rápida. Abrí la app, apuntá con tu celular y capturá cualquier momento con solo tocar un botón.",
+            genero: "Herramienta y Multimedia",
+            creador: "Aplicación móvil APK",
+            modos: "Captura de fotos desde el celular",
+            destacado: "Fácil de usar, liviana y lista para instalar escaneando el código QR.",
+            qr: "qr-camara.png"
+        },
+
+        carcel: {
+            nombre: "Escape de la Cárcel",
+            imagen: "Carcel.jpeg",
+            descripcion: "Un juego de aventura basado en comandos de consola y elecciones numéricas. Te encuentras atrapado en una celda y deberás tomar decisiones, leer las instrucciones y revisar tus récords para planear el escape sin caer en trampas.",
+            genero: "Aventura interactiva y estrategia",
+            creador: "Desarrollo de consola",
+            modos: "Navegación por menú de opciones del 1 al 4",
+            destacado: "Pone a prueba tu lógica y capacidad de decisión bajo presión.",
+            captura: "carcel-consola.jpeg"
+        },
+
+        viborita: {
+            nombre: "La Viborita (Snake)",
+            imagen: "vivo.jpeg",
+            descripcion: "El clásico juego de la serpiente controlado por teclado (W, A, S, D). Dirigí a la viborita para comer manzanas y hacerla crecer sin chocar contra las paredes ni contra tu propia cola.",
+            genero: "Arcade retro",
+            creador: "Clásico de consola",
+            modos: "Supervivencia y puntuación máxima",
+            destacado: "Conserva el estilo retro original con contador de puntaje.",
+            captura: "viborita-consola.jpeg"
+        }
+    };
+
+    const tarjetas = document.querySelectorAll(".juego");
+    const inicio = document.getElementById("inicio");
+    const informacion = document.getElementById("informacion");
+    const contenido = document.getElementById("contenido");
+    const volver = document.getElementById("volver");
+
+    function abrirJuego(id) {
+        const juego = juegos[id];
+        if (!juego) return;
+
+        contenido.replaceChildren();
+
+        const imagenContainer = document.createElement("div");
+        imagenContainer.className = "imagen-detalle-container";
+        if (id === "camara") imagenContainer.classList.add("alta");
+
+        const imagen = document.createElement("img");
+        imagen.src = juego.imagen;
+        imagen.alt = juego.nombre;
+
+        imagenContainer.appendChild(imagen);
+        contenido.appendChild(imagenContainer);
+
+        const titulo = document.createElement("h2");
+        titulo.textContent = juego.nombre;
+        contenido.appendChild(titulo);
+
+        function agregarTexto(encabezado, texto) {
+            const h3 = document.createElement("h3");
+            h3.textContent = encabezado;
+            contenido.appendChild(h3);
+
+            const p = document.createElement("p");
+            p.textContent = texto;
+            contenido.appendChild(p);
+        }
+
+        const descripcion = document.createElement("p");
+        descripcion.textContent = juego.descripcion;
+        contenido.appendChild(descripcion);
+
+        agregarTexto("🎮 Género", juego.genero);
+        agregarTexto("🏢 Creador / Tipo", juego.creador);
+        agregarTexto("🕹️ Modos de juego", juego.modos);
+        agregarTexto("⭐ ¿Qué lo hace especial?", juego.destacado);
+
+        if (juego.captura) {
+            const capturaContainer = document.createElement("div");
+            capturaContainer.className = "captura-container";
+
+            const capturaTitulo = document.createElement("h3");
+            capturaTitulo.textContent = "🖼️ Así se ve el juego";
+            capturaContainer.appendChild(capturaTitulo);
+
+            const capturaImg = document.createElement("img");
+            capturaImg.src = juego.captura;
+            capturaImg.alt = "Captura de " + juego.nombre;
+            capturaContainer.appendChild(capturaImg);
+
+            contenido.appendChild(capturaContainer);
+        }
+
+        if (juego.qr) {
+            const qrContainer = document.createElement("div");
+            qrContainer.className = "qr-container";
+
+            const qrTitulo = document.createElement("h3");
+            qrTitulo.textContent = "📱 Escaneá el código QR para descargar la app";
+            qrContainer.appendChild(qrTitulo);
+
+            const qrImg = document.createElement("img");
+            qrImg.src = juego.qr;
+            qrImg.alt = "Código QR de la Cámara";
+            qrContainer.appendChild(qrImg);
+
+            contenido.appendChild(qrContainer);
+        }
+
+        if (juego.link) {
+            const contenedorBoton = document.createElement("div");
+            contenedorBoton.style.textAlign = "left";
+
+            const enlace = document.createElement("a");
+            enlace.href = juego.link;
+            enlace.target = "_blank";
+            enlace.rel = "noopener noreferrer";
+            enlace.className = "boton btn-scratch";
+            enlace.textContent = "Jugar en Scratch ↗️";
+
+            contenedorBoton.appendChild(enlace);
+            contenido.appendChild(contenedorBoton);
+        }
+
+        inicio.style.display = "none";
+        informacion.style.display = "block";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    tarjetas.forEach(function(tarjeta) {
+        tarjeta.addEventListener("click", function() {
+            abrirJuego(tarjeta.dataset.juego);
+        });
+
+        tarjeta.addEventListener("keydown", function(evento) {
+            if (evento.target !== tarjeta) return;
+
+            if (evento.key === "Enter" || evento.key === " ") {
+                evento.preventDefault();
+                abrirJuego(tarjeta.dataset.juego);
+            }
+        });
+    });
+
+    volver.addEventListener("click", function() {
+        informacion.style.display = "none";
+        inicio.style.display = "block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+</script>
+
+</body>
+</html>
